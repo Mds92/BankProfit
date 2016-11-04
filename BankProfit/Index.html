@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>محاسبه سود بانک ها</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="Scripts/angular.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet">
+    <link href="Content/bootstrap-rtl.css" rel="stylesheet">
+    <link href="Content/SiteCss.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container" data-ng-app="MdsAngularApp" data-ng-controller="MdsAngularController">
+        <div class="row">
+            <div class="col-sm-4 col-sm-push-4" data-ng-show="ShowForm">
+                <div class="panel panel-default">
+                    <div class="panel-heading">برنامه محاسبه سود سپرده مالی</div>
+                    <div class="panel-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">مبلغ اولیه</label>
+                                <div class="col-xs-8">
+                                    <input data-ng-model="PrimaryAmount" type="number" class="form-control" style="direction: ltr;" value="1000000" step="1000000"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">قسط هر ماه</label>
+                                <div class="col-xs-8">
+                                    <input data-ng-model="PaymentInEachMonth" type="number" class="form-control" style="direction: ltr;" value="0" step="100000"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-xs-8">سود سالیانه</label>
+                                <div class="col-xs-4">
+                                    <input data-ng-model="YearlyProfit" type="number" class="form-control" style="direction: ltr;" value="20" max="100" min="0"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-8">درصد افزایش قسط در هر سال</label>
+                                <div class="col-sm-4">
+                                    <input data-ng-model="IncreasePaymentInEachMonthPercent" type="number" class="form-control" style="direction: ltr;" value="10" max="100" min="0"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-8">تعداد سال</label>
+                                <div class="col-sm-4">
+                                    <input data-ng-model="YearNumber" type="number" class="form-control" style="direction: ltr;" step="5"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10">
+                                    <div class="radio-inline">
+                                        <label>
+                                            <input type="radio" name="ProfitType" value="1" data-ng-model="ProfitType" checked>
+                                            سود روز شمار
+                                        </label>
+                                    </div>
+                                    <div class="radio-inline">
+                                        <label>
+                                            <input type="radio" name="ProfitType" value="2" data-ng-model="ProfitType">
+                                            سود سالانه
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="text-center">
+                            <button data-ng-click="CalculateOnClick($event)" type="button" class="btn btn-primary">محاسبه</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-ng-hide="ShowForm" class="col-sm-12" data-ng-show="YearsData.length > 0">
+                <div class="col-sm-2 col-padding-2px" data-ng-repeat-start="yearData in YearsData" data-ng-repeat-end>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-center" title="{{yearData.PaymentInEachMonth}}">سال {{yearData.Year}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="monthData in yearData.Month">
+                                <td class="text-center" title="مبلغ پرداختی: {{monthData.PaymentMount}}   سود: {{monthData.Profit}}">{{monthData.Mount}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" data-ng-hide="ShowForm">
+            <div class="col-sm-12 text-center">
+                <button type="button" class="btn btn-primary" data-ng-click="ReturnButtonOnClick()">بازگشت</button>
+            </div>
+        </div>
+    </div>
+    <script src="Scripts/jquery-3.1.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/MyScripts.js"></script>
+    <script src="Scripts/MdsApp.js"></script>
+</body>
+</html>
