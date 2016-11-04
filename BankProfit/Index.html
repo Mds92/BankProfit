@@ -11,7 +11,7 @@
 <body>
     <div class="container" data-ng-app="MdsAngularApp" data-ng-controller="MdsAngularController">
         <div class="row">
-            <div class="col-sm-4 col-sm-push-4" data-ng-show="ShowForm">
+            <div class="col-sm-4 col-sm-push-4" data-ng-class="{hidden: !ShowForm}">
                 <div class="panel panel-default">
                     <div class="panel-heading">برنامه محاسبه سود سپرده مالی</div>
                     <div class="panel-body">
@@ -72,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div data-ng-hide="ShowForm" class="col-sm-12" data-ng-show="YearsData.length > 0">
+            <div class="col-sm-12 hidden" data-ng-class="{hidden: ShowForm || YearsData.length <= 0}">
                 <div class="col-sm-2 col-padding-2px" data-ng-repeat-start="yearData in YearsData" data-ng-repeat-end>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" data-ng-hide="ShowForm">
+        <div class="row hidden" data-ng-class="{hidden: ShowForm}">
             <div class="col-sm-12 text-center">
                 <button type="button" class="btn btn-primary" data-ng-click="ReturnButtonOnClick()">بازگشت</button>
             </div>

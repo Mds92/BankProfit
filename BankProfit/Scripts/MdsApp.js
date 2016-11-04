@@ -33,8 +33,8 @@ MdsApp.controller("MdsAngularController", function ($scope) {
         // محاسبه سود روز شمار
         var amount = $scope.PrimaryAmount + ($scope.PrimaryAmount * $scope.YearlyProfit * 31) / 36500.0,
             roundedAmount = Math.ceil(amount),
-            paymentAmount = $scope.PrimaryAmount + $scope.PaymentInEachMonth * 12,
-            paymentInEachMonth = $scope.PaymentInEachMonth,
+            paymentInEachMonth = $scope.PaymentInEachMonth, // قسط پرداختی در هر ماه
+            paymentAmount = $scope.PrimaryAmount + paymentInEachMonth, // مبلغ پرداختی
             primaryMonthData = {
                 Mount: window.AddCommas(roundedAmount), // مبلغ نهایی
                 Profit: window.AddCommas(roundedAmount - paymentAmount), // مبلغ سود
@@ -56,15 +56,14 @@ MdsApp.controller("MdsAngularController", function ($scope) {
             // چون مبلغ ماه اول حساب شده پس شروع ماه در سال اول 2 می شود
             for (var month = startMonthNumber; month <= 12; month++) {
                 monthCounter++;
-                amount += paymentInEachMonth;
                 var monthDays = 31; // تعداد روز در ماه
                 if (month > 6 && month < 12)
                     monthDays = 30;
                 else if (month == 12)
                     monthDays = 29;
-                amount = amount + (amount * $scope.YearlyProfit * monthDays) / 36500.0;
+                paymentAmount += paymentInEachMonth;
+                amount += paymentInEachMonth + (amount * $scope.YearlyProfit * monthDays) / 36500.0;
                 roundedAmount = Math.ceil(amount);
-                paymentAmount = $scope.PrimaryAmount + paymentInEachMonth * monthCounter;
                 data.Month.push({
                     Mount: window.AddCommas(roundedAmount),
                     Profit: window.AddCommas(roundedAmount - paymentAmount),
@@ -76,10 +75,10 @@ MdsApp.controller("MdsAngularController", function ($scope) {
     }
     function calculateYearlyProfit() {
         // محاسبه سود سالانه
-        var amount = $scope.PrimaryAmount + ($scope.PrimaryAmount * $scope.YearlyProfit / 100),
+        var paymentInEachMonth = $scope.PaymentInEachMonth,
+            paymentAmount = $scope.PrimaryAmount + paymentInEachMonth * 12,
+            amount = paymentAmount + ($scope.PrimaryAmount * $scope.YearlyProfit / 100),
             roundedAmount = Math.ceil(amount),
-            paymentAmount = $scope.PrimaryAmount + $scope.PaymentInEachMonth * 12,
-            paymentInEachMonth = $scope.PaymentInEachMonth,
             primaryMonthData = {
                 Mount: window.AddCommas(roundedAmount), // مبلغ نهایی
                 Profit: window.AddCommas(roundedAmount - paymentAmount), // مبلغ سود
@@ -95,12 +94,13 @@ MdsApp.controller("MdsAngularController", function ($scope) {
             paymentInEachMonth += paymentInEachMonth * $scope.IncreasePaymentInEachMonthPercent / 100;
             data = {
                 Year: year,
-                PaymentInEachMonth: 'قسط ماهانه در این سال: ' + paymentInEachMonth,
+                PaymentInEachMonth: 'قسط ماهانه در این سال: ' + window.AddCommas(paymentInEachMonth),
                 Month: new Array()
             };
-            amount = amount + (amount * $scope.YearlyProfit / 100);
+            var payementInCurrentYear = paymentInEachMonth * 12;// مبلغ پرداختی امسال
+            paymentAmount += payementInCurrentYear;
+            amount += payementInCurrentYear + (amount * $scope.YearlyProfit / 100);
             roundedAmount = Math.ceil(amount);
-            paymentAmount = $scope.PrimaryAmount + paymentInEachMonth * 12;
             data.Month.push({
                 Mount: window.AddCommas(roundedAmount),
                 Profit: window.AddCommas(roundedAmount - paymentAmount),
